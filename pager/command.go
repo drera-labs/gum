@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/gum/internal/gumtea"
 	"github.com/charmbracelet/gum/internal/stdin"
 	"github.com/charmbracelet/gum/internal/timeout"
 )
@@ -47,8 +48,9 @@ func (o Options) Run() error {
 	ctx, cancel := timeout.Context(o.Timeout)
 	defer cancel()
 
-	_, err := tea.NewProgram(
+	_, err := gumtea.NewProgram(
 		m,
+		o.Tea,
 		tea.WithAltScreen(),
 		tea.WithReportFocus(),
 		tea.WithContext(ctx),

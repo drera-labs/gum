@@ -3,6 +3,7 @@ package table
 import (
 	"time"
 
+	"github.com/charmbracelet/gum/internal/gumtea"
 	"github.com/charmbracelet/gum/style"
 )
 
@@ -20,10 +21,11 @@ type Options struct {
 	LazyQuotes      bool     `help:"If LazyQuotes is true, a quote may appear in an unquoted field and a non-doubled quote may appear in a quoted field" default:"false" env:"GUM_TABLE_LAZY_QUOTES"`
 	FieldsPerRecord int      `help:"Sets the number of expected fields per record" default:"0" env:"GUM_TABLE_FIELDS_PER_RECORD"`
 
-	BorderStyle   style.Styles  `embed:"" prefix:"border." envprefix:"GUM_TABLE_BORDER_"`
-	CellStyle     style.Styles  `embed:"" prefix:"cell." envprefix:"GUM_TABLE_CELL_"`
-	HeaderStyle   style.Styles  `embed:"" prefix:"header." envprefix:"GUM_TABLE_HEADER_"`
-	SelectedStyle style.Styles  `embed:"" prefix:"selected." set:"defaultForeground=212" envprefix:"GUM_TABLE_SELECTED_"`
-	ReturnColumn  int           `short:"r" help:"Which column number should be returned instead of whole row as string. Default=0 returns whole Row" default:"0"`
-	Timeout       time.Duration `help:"Timeout until choose returns selected element" default:"0s" env:"GUM_TABLE_TIMEOUT"`
+	BorderStyle   style.Styles   `embed:"" prefix:"border." envprefix:"GUM_TABLE_BORDER_"`
+	CellStyle     style.Styles   `embed:"" prefix:"cell." envprefix:"GUM_TABLE_CELL_"`
+	HeaderStyle   style.Styles   `embed:"" prefix:"header." envprefix:"GUM_TABLE_HEADER_"`
+	SelectedStyle style.Styles   `embed:"" prefix:"selected." set:"defaultForeground=212" envprefix:"GUM_TABLE_SELECTED_"`
+	ReturnColumn  int            `short:"r" help:"Which column number should be returned instead of whole row as string. Default=0 returns whole Row" default:"0"`
+	Timeout       time.Duration  `help:"Timeout until choose returns selected element" default:"0s" env:"GUM_TABLE_TIMEOUT"`
+	Tea           gumtea.Options `embed:"" group:"Tea Options" envprefix:"GUM_TEA_"`
 }

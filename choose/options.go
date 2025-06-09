@@ -3,6 +3,7 @@ package choose
 import (
 	"time"
 
+	"github.com/charmbracelet/gum/internal/gumtea"
 	"github.com/charmbracelet/gum/style"
 )
 
@@ -31,4 +32,6 @@ type Options struct {
 	HeaderStyle       style.Styles `embed:"" prefix:"header." set:"defaultForeground=99" envprefix:"GUM_CHOOSE_HEADER_"`
 	ItemStyle         style.Styles `embed:"" prefix:"item." hidden:"" envprefix:"GUM_CHOOSE_ITEM_"`
 	SelectedItemStyle style.Styles `embed:"" prefix:"selected." set:"defaultForeground=212" envprefix:"GUM_CHOOSE_SELECTED_"`
+
+	Tea gumtea.Options `embed:"" group:"Tea Options" envprefix:"GUM_TEA_"`
 }

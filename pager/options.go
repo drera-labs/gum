@@ -3,6 +3,7 @@ package pager
 import (
 	"time"
 
+	"github.com/charmbracelet/gum/internal/gumtea"
 	"github.com/charmbracelet/gum/style"
 )
 
@@ -20,4 +21,6 @@ type Options struct {
 
 	// Deprecated: this has no effect anymore.
 	HelpStyle style.Styles `embed:"" prefix:"help." help:"Style the help text" set:"defaultForeground=241" envprefix:"GUM_PAGER_HELP_" hidden:""`
+
+	Tea gumtea.Options `embed:"" group:"Tea Options" envprefix:"GUM_TEA_"`
 }

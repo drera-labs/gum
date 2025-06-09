@@ -8,6 +8,7 @@ import (
 	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/gum/internal/exit"
+	"github.com/charmbracelet/gum/internal/gumtea"
 	"github.com/charmbracelet/gum/internal/stdin"
 	"github.com/charmbracelet/gum/internal/timeout"
 )
@@ -42,8 +43,9 @@ func (o Options) Run() error {
 		unselectedStyle:  o.UnselectedStyle.ToLipgloss(),
 		promptStyle:      o.PromptStyle.ToLipgloss(),
 	}
-	tm, err := tea.NewProgram(
+	tm, err := gumtea.NewProgram(
 		m,
+		o.Tea,
 		tea.WithOutput(os.Stderr),
 		tea.WithContext(ctx),
 	).Run()
