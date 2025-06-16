@@ -113,6 +113,7 @@ type model struct {
 	showHelp         bool
 	help             help.Model
 	keymap           keymap
+	useMouse         bool
 
 	// styles
 	cursorStyle       lipgloss.Style
@@ -134,6 +135,68 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		return m, nil
 
+	case tea.MouseMsg:
+		if !m.useMouse {
+			break
+		}
+		// scroll with mouse wheel
+		if msg.Button == tea.MouseButtonWheelUp && msg.Action == tea.MouseActionPress {
+			start, _ := m.paginator.GetSliceBounds(len(m.items))
+			m.index--
+			if m.index < 0 {
+				m.index = len(m.items) - 1
+				m.paginator.Page = m.paginator.TotalPages - 1
+			}
+			if m.index < start {
+				m.paginator.PrevPage()
+			}
+			return m, nil
+		}
+		if msg.Button == tea.MouseButtonWheelDown && msg.Action == tea.MouseActionPress {
+			_, end := m.paginator.GetSliceBounds(len(m.items))
+			m.index++
+			if m.index >= len(m.items) {
+				m.index = 0
+				m.paginator.Page = 0
+			}
+			if m.index >= end {
+				m.paginator.NextPage()
+			}
+			return m, nil
+		}
+		if msg.Button == tea.MouseButtonLeft && msg.Action == tea.MouseActionPress {
+			// calculate header lines count
+			headerLines := 0
+			if m.header != "" {
+				headerLines = strings.Count(m.header, "\n") + 1
+			}
+			// determine visible items range
+			start, end := m.paginator.GetSliceBounds(len(m.items))
+			// compute clicked row relative to list
+			row := msg.Y - headerLines
+			if row >= 0 && row < end-start {
+				idx := clamp(start+row, 0, len(m.items)-1)
+				m.index = idx
+				// single selection: select and submit
+				if m.limit <= 1 {
+					m.items[m.index].selected = true
+					m.quitting = true
+					m.submitted = true
+					return m, tea.Quit
+				}
+				// multi-select: toggle selection
+				if m.items[m.index].selected {
+					m.items[m.index].selected = false
+					m.numSelected--
+				} else if m.numSelected < m.limit {
+					m.items[m.index].selected = true
+					m.items[m.index].order = m.currentOrder
+					m.numSelected++
+					m.currentOrder++
+				}
+			}
+		}
+		return m, nil
 	case tea.KeyMsg:
 		start, end := m.paginator.GetSliceBounds(len(m.items))
 		km := m.keymap

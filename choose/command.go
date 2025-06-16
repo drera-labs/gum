@@ -144,17 +144,25 @@ func (o Options) Run() error {
 		showHelp:          o.ShowHelp,
 		help:              help.New(),
 		keymap:            km,
+		useMouse:          o.Mouse,
 	}
 
 	ctx, cancel := timeout.Context(o.Timeout)
 	defer cancel()
 
 	// Disable Keybindings since we will control it ourselves.
-	tm, err := tea.NewProgram(
-		m,
+	programOptions := []tea.ProgramOption{
 		tea.WithOutput(os.Stderr),
-		tea.WithContext(ctx),
-	).Run()
+	}
+	if o.Mouse {
+		programOptions = append(programOptions,
+			tea.WithMouseCellMotion(),
+			tea.WithInputTTY(),
+			tea.WithAltScreen(),
+		)
+	}
+	programOptions = append(programOptions, tea.WithContext(ctx))
+	tm, err := tea.NewProgram(m, programOptions...).Run()
 	if err != nil {
 		return fmt.Errorf("unable to pick selection: %w", err)
 	}

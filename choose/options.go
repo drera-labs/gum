@@ -16,6 +16,7 @@ type Options struct {
 	Cursor           string        `help:"Prefix to show on item that corresponds to the cursor position" default:"> " env:"GUM_CHOOSE_CURSOR"`
 	ShowHelp         bool          `help:"Show help keybinds" default:"true" negatable:"" env:"GUM_CHOOSE_SHOW_HELP"`
 	Timeout          time.Duration `help:"Timeout until choose returns selected element" default:"0s" env:"GUM_CHOOSE_TIMEOUT"` // including timeout command options [Timeout,...]
+	Mouse            bool          `help:"Enable mouse support" default:"false" env:"GUM_CHOOSE_MOUSE"`
 	Header           string        `help:"Header value" default:"Choose:" env:"GUM_CHOOSE_HEADER"`
 	CursorPrefix     string        `help:"Prefix to show on the cursor item (hidden if limit is 1)" default:"• " env:"GUM_CHOOSE_CURSOR_PREFIX"`
 	SelectedPrefix   string        `help:"Prefix to show on selected items (hidden if limit is 1)" default:"✓ " env:"GUM_CHOOSE_SELECTED_PREFIX"`
