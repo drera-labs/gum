@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"slices"
 	"sort"
 	"strings"
@@ -174,6 +175,22 @@ func (o Options) Run() error {
 			out = append(out, options[item.text])
 		}
 	}
+
+	if o.Command != "" {
+		o.Selected = out
+
+		command := strings.Split(o.Command, " ")
+
+		cmd := exec.Command(command[0], command[1:]...)
+		cmd.Stdin = strings.NewReader(strings.Join(o.Selected, o.InputDelimiter))
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("unable to run command %q: %w", o.Command, err)
+		}
+
+		return o.Run()
+	}
+
 	tty.Println(strings.Join(out, o.OutputDelimiter))
+
 	return nil
 }
